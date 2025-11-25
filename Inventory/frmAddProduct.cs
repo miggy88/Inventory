@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Inventory
 {
-    public partial class frmAddProduct: Form
+    public partial class frmAddProduct : Form
     {
 
         private string _ProductName;
@@ -35,7 +35,7 @@ namespace Inventory
             if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
                 throw new
                     ArgumentException("Invalid product name! ");
-                return name;
+            return name;
         }
         public int Quantity(string qty)
         {
@@ -47,7 +47,7 @@ namespace Inventory
         public double SellingPrice(string price)
         {
             if (!Regex.IsMatch(price.ToString(), @"^(\d*\.)?\d+$"))
-                throw new 
+                throw new
                     ArgumentException("Invalid product price! ");
             return Convert.ToDouble(price);
         }
@@ -67,7 +67,7 @@ namespace Inventory
         {
             string[] ListOfProductCategory = { "Beverages", "Bread", "Canned", "Dairy", "Frozen Goods", "Meat", "Personal Care", "Other" };
 
-            foreach(string category in ListOfProductCategory)
+            foreach (string category in ListOfProductCategory)
             {
                 cbCategory.Items.Add(category);
             }
@@ -75,17 +75,35 @@ namespace Inventory
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-            _ProductName = Product_Name(txtProductName.Text);
-            _Category = cbCategory.Text;
-            _MfgDate = dtPickerMfgDate.Value.ToString("yyyy-MM-dd");
-            _ExpDate = dtPickerExpDate.Value.ToString("yyyy-MM-dd");
-            _Description = richTxtDescription.Text;
-            _Quantity = Quantity(txtQuantity.Text);
-            _SellPrice = SellingPrice(txtSellPrice.Text);
-            showProductList.Add(new Product(_ProductName, _Category, _MfgDate,
-            _ExpDate, _SellPrice, _Quantity, _Description));
-            gridViewProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            gridViewProductList.DataSource = showProductList;
+            try
+            {
+                string name = Product_Name(txtProductName.Text);
+                int qty = Quantity(txtQuantity.Text);
+                double price = SellingPrice(txtSellPrice.Text);
+
+                var product = new { Name = name, Quantityy = qty, SellPricee = price };
+                showProductList.Add(product);
+
+                MessageBox.Show("Product added successfully!");
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                txtProductName.Clear();
+                txtQuantity.Clear();
+                txtSellPrice.Clear();
+                cbCategory.SelectedIndex = -1;
+                dtPickerMfgDate.Value = DateTime.Now;
+                dtPickerExpDate.Value = DateTime.Now;
+                richTxtDescription.Clear();
+            }
         }
     }
 }
