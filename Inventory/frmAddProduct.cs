@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Inventory.CustomExeptionClass;
 
 namespace Inventory
 {
@@ -28,29 +29,33 @@ namespace Inventory
             InitializeComponent();
 
             showProductList = new BindingSource();
+            gridViewProductList.DataSource = showProductList;
+
+
+
         }
 
         public string Product_Name(string name)
         {
             if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
-                throw new
-                    ArgumentException("Invalid product name! ");
+                throw new StringFormatException(name);
             return name;
         }
+
         public int Quantity(string qty)
         {
-            if (!Regex.IsMatch(qty, @"^[0-9]"))
-                throw new
-                ArgumentException("Invalid product Quantity! ");
+            if (!Regex.IsMatch(qty, @"^[0-9]+$"))
+                throw new NumberFormatException(qty);
             return Convert.ToInt32(qty);
         }
+
         public double SellingPrice(string price)
         {
-            if (!Regex.IsMatch(price.ToString(), @"^(\d*\.)?\d+$"))
-                throw new
-                    ArgumentException("Invalid product price! ");
+            if (!Regex.IsMatch(price, @"^(\d*\.)?\d+$"))
+                throw new CurrencyFormatException(price);
             return Convert.ToDouble(price);
         }
+
 
 
         private void label2_Click(object sender, EventArgs e)
@@ -74,36 +79,41 @@ namespace Inventory
         }
 
         private void btnAddProduct_Click(object sender, EventArgs e)
-        {
+        
+           
+       {
             try
             {
                 string name = Product_Name(txtProductName.Text);
                 int qty = Quantity(txtQuantity.Text);
                 double price = SellingPrice(txtSellPrice.Text);
 
-                var product = new { Name = name, Quantityy = qty, SellPricee = price };
+                var product = new { Name = name, Quantity = qty, Price = price };
                 showProductList.Add(product);
 
                 MessageBox.Show("Product added successfully!");
             }
-            catch (ArgumentException ex)
+            catch (StringFormatException ex)
             {
-                MessageBox.Show(ex.Message, "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("String Error: " + ex.Message);
             }
-            catch (Exception ex)
+            catch (NumberFormatException ex)
             {
-                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Number Error: " + ex.Message);
+            }
+            catch (CurrencyFormatException ex)
+            {
+                MessageBox.Show("Currency Error: " + ex.Message);
             }
             finally
             {
                 txtProductName.Clear();
                 txtQuantity.Clear();
                 txtSellPrice.Clear();
-                cbCategory.SelectedIndex = -1;
-                dtPickerMfgDate.Value = DateTime.Now;
-                dtPickerExpDate.Value = DateTime.Now;
-                richTxtDescription.Clear();
+                txtProductName.Focus();
             }
         }
     }
 }
+        
+    
