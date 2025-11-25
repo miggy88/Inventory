@@ -42,5 +42,15 @@ namespace Inventory
         {
 
         }
+
+        private void frmAddProduct_Load(object sender, EventArgs e)
+        {
+            string[] ListOfProductCategory = { "Beverages", "Bread", "Canned", "Dairy", "Frozen Goods", "Meat", "Personal Care", "Other" };
+
+            foreach(string category in ListOfProductCategory)
+            {
+                cbCategory.Items.Add(category);
+            }
+        }
     }
 }
