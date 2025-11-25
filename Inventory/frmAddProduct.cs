@@ -12,9 +12,25 @@ namespace Inventory
 {
     public partial class frmAddProduct: Form
     {
+
+        private string _ProductName;
+        private string _Category;
+        private string _MfgDate;
+        private string _ExpDate;
+        private string _Description;
+        private int _Quantity;
+        private double _SellPrice;
+
         public frmAddProduct()
         {
+           
+             
+        
+
+
             InitializeComponent();
+
+
         }
 
         private void label2_Click(object sender, EventArgs e)
