@@ -22,9 +22,12 @@ namespace Inventory
         private int _Quantity;
         private double _SellPrice;
 
+        private BindingSource showProductList;
         public frmAddProduct()
         {
             InitializeComponent();
+
+            showProductList = new BindingSource();
         }
 
         public string Product_Name(string name)
