@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomExeptionClass.cs" />
     <Compile Include="frmAddProduct.cs">
       <SubType>Form</SubType>
     </Compile>
